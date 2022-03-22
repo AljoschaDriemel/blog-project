@@ -5,6 +5,8 @@ import Home from './pages/home/Home';
 import PrimarySearchAppBar from './components/appbar/Appbar';
 import { Col, Row } from 'react-bootstrap'
 import Navbar from './components/navbar/Navbar';
+import Login from './pages/login/Login'
+import Register from './pages/register/Register'
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
 
      <Routes>
        <Route path='/' element={<Home />}/>
+       <Route path='/login' element={<Login />}/>
+       <Route path='/register' element={<Register />}/>
      </Routes>
     </div>
   );
