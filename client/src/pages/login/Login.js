@@ -16,7 +16,7 @@ export default function Login() {
     password: "",
   });
 
-  const dataContext = useContext(DataContext);
+  const { userData, setUserData} = useContext(DataContext);
 
   const handleNaviSignUp = () => {
     navigate("/register");
@@ -30,9 +30,11 @@ export default function Login() {
     console.log("response is: ", response);
     if (response.data.success) {
       console.log("login client side data SUCCESS");
-      dataContext.setUserData({ ...response.data.user });
-      navigate("/home");
+      setUserData({ ...response.data.user });
+       
     }
+    console.log('userdata: ', userData)
+    navigate("/home");
   };
   return (
     <div className="login ">
