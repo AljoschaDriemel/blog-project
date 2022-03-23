@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Login.scss";
 import { useNavigate } from "react-router";
+import { DataContext } from "../context/Context";
+import axios from "axios";
 export default function Login() {
   const navigate = useNavigate();
+  // PLACEHOLDERS
+  const [userPH, setUserPH] = useState(`  Username`);
+  const [emailPH, setEmailPH] = useState(`  Email`);
+  const [passwordPH, setPaswordPH] = useState("  Password");
 
-  const [userOrEmailPH, setUserOrEmailPH] = useState(`  Username / Email`);
-  const [passwordPH, setPaswrdPH] = useState("  Password");
+  const [data, setData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const { userData, setUserData} = useContext(DataContext);
 
   const handleNaviSignUp = () => {
     navigate("/register");
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log("handlelogin");
+    if (!data.password) return;
+    const response = await axios.post("/users/login", data);
+    console.log("response is: ", response);
+    if (response.data.success) {
+      console.log("login client side data SUCCESS");
+      setUserData({ ...response.data.user });
+       
+    }
+    console.log('userdata: ', userData)
+    navigate("/home");
   };
   return (
     <div className="login ">
       <div className="bg-img"></div>
 
       <div className="login-main shadow-lg">
-        <form className="form">
+        <form onClick={(e) => handleLogin(e)} className="form">
           <div className="logo">
             <img
               className="logo-image"
@@ -25,18 +51,32 @@ export default function Login() {
           </div>
           <h3 className="title">SIGN IN</h3>
           <input
+          value={data.username}
+          onChange={(e) => setData({ ...data, username: e.target.value })}
+
             className="input input-user"
             type="text"
-            placeholder={userOrEmailPH}
-            onFocus={() => setUserOrEmailPH("")}
-            onBlur={() => setUserOrEmailPH("  Username / Email")}
+            placeholder={userPH}
+            onFocus={() => setUserPH("")}
+            onBlur={() => setUserPH("  Username")}
           />
           <input
+          value={data.email}
+          onChange={(e) => setData({ ...data, email: e.target.value })}
+            className="input input-user"
+            type="email"
+            placeholder={emailPH}
+            onFocus={() => setEmailPH("")}
+            onBlur={() => setEmailPH("  Email")}
+          />
+          <input
+          value={data.password}
+          onChange={(e) => setData({ ...data, password: e.target.value })}
             className="input input-email"
             type="text"
             placeholder={passwordPH}
-            onFocus={() => setPaswrdPH("")}
-            onBlur={() => setPaswrdPH("  Password")}
+            onFocus={() => setPaswordPH("")}
+            onBlur={() => setPaswordPH("  Password")}
           />
           <div className="checkbox-div">
             <input
