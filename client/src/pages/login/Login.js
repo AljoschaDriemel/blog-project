@@ -16,7 +16,7 @@ export default function Login() {
     password: "",
   });
 
-  const { userData, setUserData} = useContext(DataContext);
+  const { userData, setUserData } = useContext(DataContext);
 
   const handleNaviSignUp = () => {
     navigate("/register");
@@ -31,10 +31,8 @@ export default function Login() {
     if (response.data.success) {
       console.log("login client side data SUCCESS");
       setUserData({ ...response.data.user });
-       
+      navigate("/home");
     }
-    console.log('userdata: ', userData)
-    navigate("/home");
   };
   return (
     <div className="login ">
@@ -51,9 +49,8 @@ export default function Login() {
           </div>
           <h3 className="title">SIGN IN</h3>
           <input
-          value={data.username}
-          onChange={(e) => setData({ ...data, username: e.target.value })}
-
+            value={data.username}
+            onChange={(e) => setData({ ...data, username: e.target.value })}
             className="input input-user"
             type="text"
             placeholder={userPH}
@@ -61,8 +58,8 @@ export default function Login() {
             onBlur={() => setUserPH("  Username")}
           />
           <input
-          value={data.email}
-          onChange={(e) => setData({ ...data, email: e.target.value })}
+            value={data.email}
+            onChange={(e) => setData({ ...data, email: e.target.value })}
             className="input input-user"
             type="email"
             placeholder={emailPH}
@@ -70,8 +67,8 @@ export default function Login() {
             onBlur={() => setEmailPH("  Email")}
           />
           <input
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
+            value={data.password}
+            onChange={(e) => setData({ ...data, password: e.target.value })}
             className="input input-email"
             type="text"
             placeholder={passwordPH}
