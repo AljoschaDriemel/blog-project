@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const cookieParser = require('cookie-parser')
+
+app.use(cookieParser());
 
 app.use(express.json());
 
 app.use("/users", require("./controllers/userController"))
+app.use("/posts", require("./controllers/postController"))
 
 app.get('/', (req, res) => {
     res.send('HELLO FROM SERVER')

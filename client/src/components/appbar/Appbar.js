@@ -16,6 +16,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { DataContext } from "../../pages/context/Context";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const { userData, setUserData } = React.useContext(DataContext)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -86,6 +89,24 @@ export default function PrimarySearchAppBar() {
   const navigate = useNavigate();
   const handleLogin = () => {
     navigate("/login");
+  };
+  const handleProfile = () => {
+    navigate("/profile")
+  }
+
+  // LOGOUT
+  const handleLogout = async () => {
+
+    const response = await axios.get('/users/logout')
+
+    if (response.data.success) {
+       // clear the context
+    setUserData(null);
+    }
+   
+    // redirect user to home
+    navigate("/login");
+    console.log("after logout userDataContext is:", userData);
   };
 
   const menuId = "primary-search-account-menu";
@@ -195,16 +216,32 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box className="" sx={{ display: { xs: "none", md: "flex" } }}>
             <Typography
-           
               className="d-flex align-items-center"
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
               onClick={handleLogin}
-            > <IconButton className="text-light"> LOGIN</IconButton>
+            >
+              {" "}
+              <IconButton  className="text-light"> LOGIN</IconButton>
+              
+            </Typography>
+
+            <Typography
+           
+              className="d-flex align-items-center"
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" } }}
+              onClick={handleProfile}
+            > <IconButton className="text-light"> Profile</IconButton>
              
             </Typography>
+
+            <IconButton onClick={handleLogout} className="text-light"> LOGOUT</IconButton>
+
             <IconButton
               size="large"
               aria-label="show 4 new mails"
