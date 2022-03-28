@@ -29,7 +29,7 @@ export default function Login() {
     const response = await axios.post("/users/login", data);
     console.log("response is: ", response);
     if (response.data.success) {
-      console.log("login client side data SUCCESS");
+      console.log("login client side data SUCCESS", data);
       setUserData({ ...response.data.user });
       navigate("/home");
     }

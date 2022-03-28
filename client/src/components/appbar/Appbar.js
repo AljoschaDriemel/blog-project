@@ -90,6 +90,9 @@ export default function PrimarySearchAppBar() {
   const handleLogin = () => {
     navigate("/login");
   };
+  const handleProfile = () => {
+    navigate("/profile")
+  }
 
   // LOGOUT
   const handleLogout = async () => {
@@ -224,7 +227,21 @@ export default function PrimarySearchAppBar() {
               <IconButton  className="text-light"> LOGIN</IconButton>
               
             </Typography>
+
+            <Typography
+           
+              className="d-flex align-items-center"
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" } }}
+              onClick={handleProfile}
+            > <IconButton className="text-light"> Profile</IconButton>
+             
+            </Typography>
+
             <IconButton onClick={handleLogout} className="text-light"> LOGOUT</IconButton>
+
             <IconButton
               size="large"
               aria-label="show 4 new mails"

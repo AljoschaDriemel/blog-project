@@ -6,9 +6,10 @@ export const DataContext = createContext()
 
 export default function DataProvider({children}) {
 
-    const [userData, setUserData] = useState(null)
+    const [userData, setUserData] = useState([]);
+    const [posts, setPosts] = useState([]);
 
-    return <DataContext.Provider value={{userData, setUserData}}> 
+    return <DataContext.Provider value={{userData, setUserData, posts, setPosts}}> 
         {children}
     </DataContext.Provider>
 }
