@@ -5,6 +5,7 @@ require("dotenv").config();
 app.use(express.json());
 
 app.use("/users", require("./controllers/userController"))
+app.use("/posts", require("./controllers/postController"))
 
 app.get('/', (req, res) => {
     res.send('HELLO FROM SERVER')

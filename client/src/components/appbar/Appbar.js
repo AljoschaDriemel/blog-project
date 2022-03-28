@@ -87,6 +87,9 @@ export default function PrimarySearchAppBar() {
   const handleLogin = () => {
     navigate("/login");
   };
+  const handleProfile = () => {
+    navigate("/profile")
+  }
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -203,6 +206,17 @@ export default function PrimarySearchAppBar() {
               sx={{ display: { xs: "none", sm: "block" } }}
               onClick={handleLogin}
             > <IconButton className="text-light"> LOGIN</IconButton>
+             
+            </Typography>
+            <Typography
+           
+              className="d-flex align-items-center"
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" } }}
+              onClick={handleProfile}
+            > <IconButton className="text-light"> Profile</IconButton>
              
             </Typography>
             <IconButton

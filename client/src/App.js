@@ -7,6 +7,7 @@ import { Col, Row } from 'react-bootstrap'
 import Navbar from './components/navbar/Navbar';
 import Login from './pages/login/Login'
 import Register from './pages/register/Register'
+import Profile from './pages/profile/Profile';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
        <Route path='/home' element={<Home />}/>
        <Route path='/login' element={<Login />}/>
        <Route path='/register' element={<Register />}/>
+       <Route path='/profile' element={<Profile />} />
      </Routes>
     </div>
   );
