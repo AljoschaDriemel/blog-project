@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
     const { username, email, password } = req.body
     if( !(email || username) || !password) return res.send({success: false, errorId: 1})
 
-    const user = await User.findOne({
+    let user = await User.findOne({
       $or: [{ email }, { username }],       
     }).select("-__v");
     console.log("Login: user is", user);
@@ -51,7 +51,16 @@ router.post('/login', async (req, res) => {
 
     if (!passMatch) return res.send({ success: false, errorId: 3 }); 
 
-    res.send({ success: true});
+    const userWithToken = await user.generateToken();
+
+    user = user.toObject();
+    delete user.pass;
+    delete user.token;
+
+    res
+      .cookie("cookieCMSBLOG", userWithToken.token)
+      .send({ success: true, user });
+   
   } catch (error) {
     console.log('LOGIN ERROR:', error.message)
     res.send(error.message)
@@ -103,6 +112,23 @@ router.patch('/profile', uploadSimple.single('image'), async (req, res) => {
       res.send(error.message)
   }
 })
+
+// LOGOUT
+
+router.get('/logout', async (req, res) => {
+
+  try {
+
+      res.clearCookie('cookieCMSBLOG').send({success: true})
+      console.log('logout: user logged out')
+      
+  } catch (error) {
+      
+      console.log('Logout ERROR:', error.message)
+      res.send(error.message)
+  }
+})
+
 
 
   module.exports = router;
