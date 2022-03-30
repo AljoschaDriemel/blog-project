@@ -3,6 +3,7 @@ import "./Login.scss";
 import { useNavigate } from "react-router";
 import { DataContext } from "../context/Context";
 import axios from "axios";
+import { Link } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
   // PLACEHOLDERS
@@ -89,9 +90,11 @@ export default function Login() {
           <button className="login-button" type="submit">
             Sign In
           </button>
-          <div className="forgot">
-            <small>Forgot Password</small>
-          </div>
+          <Link to="/forgotpassword">
+            <div className="forgot">
+              <small>Forgot Password</small>
+            </div>
+          </Link>
           <div className="no-account">
             <small>
               Don't have an account ?{" "}
