@@ -11,6 +11,7 @@ import EmailConfirm from './pages/email/EmailConfirm'
 import ForgotPass from './pages/forgotPass/ForgotPass'
 import ChangePass from './pages/changePass/ChangePass'
 import NotFound from "./pages/notFound/NotFound";
+import Profile from "./pages/profile/Profile";
 
 
 function App() {
@@ -35,9 +36,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+
+
         <Route path="/emailconfirm/:token" element={<EmailConfirm />} />
         <Route path="/forgotpassword" element={<ForgotPass />} />
         <Route path="/changepassword/:token" element={<ChangePass />} />
+
       </Routes>
     </div>
   );

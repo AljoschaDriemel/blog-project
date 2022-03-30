@@ -1,15 +1,16 @@
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { styled } from "@mui/material/styles";
+import { Editor } from '@tinymce/tinymce-react';
 
 const Input = styled("input")({
   display: "none",
 });
+
 export default function Modal({
   save,
   close,
@@ -17,7 +18,14 @@ export default function Modal({
   onTextChange,
   onChangeFile,
   valueImage,
+  data,
+  setData,
+  editorRef
 }) {
+  
+  const handleEditorChange = () => {
+    setData({...data, text:editorRef.current.getContent()})
+  }
   return (
     <Box
       style={{
@@ -26,10 +34,10 @@ export default function Modal({
         backgroundColor: "whitesmoke",
         borderRadius: "5px",
         border: "3px solid grey",
-        width: "300px",
-        height: "300px",
-        top: "calc(100vh/2 - 150px)",
-        left: "calc(100vw/2 - 150px)",
+        width: "60%",
+        height: "700px",
+        top: "200px",
+        left: "350px",
         display: "grid",
         placeContent: "center",
       }}
@@ -54,6 +62,10 @@ export default function Modal({
             id="file"
             accept="image/*"
           />
+          <label>Title</label>
+          <input placeholder="Type the title" onChange={e=>setData({...data, title: e.target.value})} value={data.title}></input>
+          <label>Title</label>
+          <input placeholder="Type the subtitle" onChange={e=>setData({...data, subtitle: e.target.value})} value={data.subtitle}></input>
           <Button
             variant="contained"
             component="span"
@@ -62,7 +74,24 @@ export default function Modal({
             Upload <PhotoCameraIcon />
           </Button>
         </label>
-        <TextField
+        <Editor
+        onInit={(evt, editor) => editorRef.current = editor}
+        initialValue=""
+        init={{
+          height: 500,
+          menubar: true,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+          ],
+          toolbar: 'undo redo | formatselect | ' +
+          'bold italic backcolor | alignleft aligncenter ' +
+          'alignright alignjustify | bullist numlist outdent indent | ' +
+          'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        }}
+        onEditorChange={handleEditorChange}
           style={{ width: "95%" }}
           required
           id="outlined-required"
@@ -70,13 +99,6 @@ export default function Modal({
           value={valueText}
           onChange={onTextChange}
         />
-        {/*  <input
-          value={valueImage}
-          onChange={onChangeFile}
-          type="file"
-          name="image"
-          id="file"
-        /> */}
       </Stack>
 
       <div>
@@ -94,6 +116,7 @@ export default function Modal({
           onClick={save}
           endIcon={<SendIcon />}
           style={{ width: "50%" }}
+          onClick={save}
         >
           Save
         </Button>

@@ -35,6 +35,14 @@ const postSchema = new Schema({
       },
     },
   ],
+  published: {
+    type:Boolean,
+    default:false
+  },
+  date: {
+    type:Date,
+    default: Date.now()
+  }
 });
 
 const Post = mongoose.model("Post", postSchema);

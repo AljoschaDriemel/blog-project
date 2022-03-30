@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { DataContext } from "../context/Context";
 import Modal from "../modal/Modal";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { purple } from "@mui/material/colors";
 import "./Profile.scss";
+import { useRef } from 'react';
+import parse from "html-react-parser"
+
 
 export default function Profile() {
   const { posts, setPosts, userData, setUserData } =
@@ -24,45 +25,29 @@ export default function Profile() {
   const [profileBlobFile, setProfileBlobFile] = useState(null);
 
 
-  const [data, setData] = useState({
+  const [data, setData] = useState ({
     owner: userData._id,
-    description: text,
+    text: "",
     image: fileUrl,
+    title:"",
+    subtitle:"",
+    published: false
   });
-  /* ----------------PROFILE IMAGE----------------------------------------- */
-  useEffect(() => {
-    setData({...data, ...userData})
-    setProfileUrl(userData?.image);
-  }, []);
-  /* useEffect(()=> {
- const getData = () => {
-posts.filter(item ) => {
-  if (item.id === )
-}
-
- }
-}) */
-  const handleProfilePhoto = async () => {
-    const formdata = new FormData();
-
-    formdata.set("_id", userData._id);
-
-    if (profileBlobFile)
-      formdata.set("image", profileBlobFile, "profile_image"); // add a file and a name
-
-    const config = {
-      headers: { "content-type": "mulitpart/form-data" },
-    };
-
-    const response = await axios.patch("/users/profile", formdata, config);
-    console.log("response from profile photo is", response);
-
-    if (response.data.success) setUserData({ ...response.data.user });
-  };
-
+  const editorRef = useRef();
+  
+ 
   /* --------------------POST IMAGE--------------------------------------------- */
   const handleSave = async () => {
-    const formdata = new FormData();
+    if (editorRef.current.getContent()) {
+      console.log('Hande Save:', editorRef.current.getContent())
+
+      console.log('data is', data)
+
+      const response = await axios.post('/posts/addPost', data)
+
+      console.log('response is', response)}
+    
+     const formdata = new FormData();
 
     Object.entries(data).forEach((item) => formdata.set(item[0], item[1]));
 
@@ -80,8 +65,9 @@ posts.filter(item ) => {
     setText("");
     setShowModal(false);
 
-    if (response.data.success) setPosts([...posts, response.data.post]);
-  };
+    if (response.data.success) setPosts([...posts, response.data.post]) ;
+  }
+  
 
   /* -------------POST IMAGE CHANGE ---------------------- */
   const handleImageChange = (e) => {
@@ -113,21 +99,14 @@ posts.filter(item ) => {
       backgroundColor: purple[700],
     },
   }));
-  console.log("UserData is:", userData)
   return (
     <div className="profileContainer">
       <div className="profileInfo">
-        <img
-          src={profileUrl}
-          alt="userImage"
-          className="profilePic"
-          style={{ height: "150px", width: "150px", objectFit: "cover" }}
-        />
-        <h1>
+        <h1 style={{fontWeight:"bold"}}>
           {" "}
           Welcome: @{userData ? userData.username : "Stranger"}{" "}
           <div>
-            <h5> 3 posts</h5>{" "}
+            <h5>{posts.length} posts</h5>{" "}
           </div>
         </h1>
 
@@ -145,19 +124,7 @@ posts.filter(item ) => {
               left: "420px",
             }}
           >
-            <AddAPhotoIcon />
           </label>
-          <div>
-            <SaveAsIcon
-              onClick={handleProfilePhoto}
-              style={{
-                cursor: "pointer",
-                position: "absolute",
-                top: "290px",
-                left: "420px",
-              }}
-            />
-          </div>
           <input
             accept="image/*"
             onChange={handleProfileChange}
@@ -180,7 +147,7 @@ posts.filter(item ) => {
               }}
               key={item?._id}
             >
-              <p>{item?.description}</p>
+              <p>{parse(item.text)}</p>
               <img
                 src={item?.image}
                 alt=""
@@ -197,6 +164,9 @@ posts.filter(item ) => {
           valueText={text}
           onTextChange={(e) => setText(e.target.value)}
           onChangeFile={handleImageChange}
+          data={data}
+          setData={setData}
+          editorRef={editorRef}
         />
       ) : null}
     </div>
