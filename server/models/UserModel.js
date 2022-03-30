@@ -82,10 +82,6 @@ userSchema.statics.getPayload = async (token) => {
     return error.message;
   }
 };
-
-
-  return user
-} 
 const User = mongoose.model("User", userSchema);
 
 module.exports = User
