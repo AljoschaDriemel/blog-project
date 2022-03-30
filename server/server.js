@@ -8,8 +8,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/users", require("./controllers/userController"))
-app.use("/posts", require("./controllers/postController"))
-
+app.use("/posts", require("./routes/postRoutes"));
+app.use(express.static("./server/uploads"))
 app.get('/', (req, res) => {
     res.send('HELLO FROM SERVER')
 })
