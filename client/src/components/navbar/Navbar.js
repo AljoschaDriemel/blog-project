@@ -19,8 +19,6 @@ import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
-
-
 export default function Navbar() {
   const navigate = useNavigate();
   const handleLogin = () => {
