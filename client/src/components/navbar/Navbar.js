@@ -28,7 +28,9 @@ export default function Navbar() {
   return (
     <div>
       <Box sx={{ display: "flex" }}>
+      
         <CssBaseline />
+        
         <Drawer
           component="nav"
           sx={{
