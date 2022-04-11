@@ -62,10 +62,12 @@ export default function Modal({
             id="file"
             accept="image/*"
           />
-          <label>Title</label>
+          <label>Title: </label>
           <input placeholder="Type the title" onChange={e=>setData({...data, title: e.target.value})} value={data.title}></input>
-          <label>Title</label>
+          <label>Subtitle: </label>
           <input placeholder="Type the subtitle" onChange={e=>setData({...data, subtitle: e.target.value})} value={data.subtitle}></input>
+          <label>Category: </label>
+          <input placeholder="Type the category" onChange={e=>setData({...data, category: e.target.value})} value={data.category}></input>
           <Button
             variant="contained"
             component="span"

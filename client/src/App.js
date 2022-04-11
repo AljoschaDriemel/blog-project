@@ -12,7 +12,6 @@ import ChangePass from './pages/changePass/ChangePass'
 import NotFound from "./pages/notFound/NotFound";
 
 
-
 function App() {
   return (
     <div className="App">
@@ -28,7 +27,6 @@ function App() {
         <Route path="/emailconfirm/:token" element={<EmailConfirm />} />
         <Route path="/forgotpassword" element={<ForgotPass />} />
         <Route path="/changepassword/:token" element={<ChangePass />} />
-
       </Routes>
     </div>
   );
