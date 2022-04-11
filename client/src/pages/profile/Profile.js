@@ -104,7 +104,7 @@ export default function Profile() {
       <div className="profileInfo">
         <h1 style={{fontWeight:"bold"}}>
           {" "}
-          Welcome: @{userData ? userData.username : "Stranger"}{" "}
+          Welcome admin: @{userData ? userData.username : "Stranger"}{" "}
           <div>
             <h5>{posts.length} posts</h5>{" "}
           </div>
@@ -113,46 +113,24 @@ export default function Profile() {
         <ColorButton variant="contained" onClick={() => setShowModal(true)}>
           Add Post
         </ColorButton>
-
-        <div>
-          <label
-            htmlFor="file1"
-            style={{
-              cursor: "pointer",
-              position: "absolute",
-              top: "260px",
-              left: "420px",
-            }}
-          >
-          </label>
-          <input
-            accept="image/*"
-            onChange={handleProfileChange}
-            id="file1"
-            type="file"
-            style={{ visibility: "hidden" }}
-            //value={profileBlobFile}
-          />
-        </div>
       </div>
-      <h1>Your Posts:</h1>
       <div className="userPostContainer">
         {posts?.map((item) =>
           item?.owner._id === userData?._id ? (
-            <div
-              style={{
-                border: "1px solid",
-                padding: "30px",
-                margin: "20px",
-              }}
+            <div className="card"
               key={item?._id}
             >
-              <p>{parse(item.text)}</p>
-              <img
+             
+              <img className="image"
                 src={item?.image}
                 alt=""
-                style={{ height: "300px", width: "300px", objectFit: "cover" }}
-              />
+              /> 
+              <h2>{item.title}</h2>
+              <h4>{item.subtitle}</h4>
+              <p>{parse(item.text)}</p>
+              <p>Text created by {item.owner.username} on {item.date}</p>
+              <p>Category: {item.category}</p>
+              
             </div>
           ) : null
         )}
