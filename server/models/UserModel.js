@@ -31,6 +31,7 @@ const userSchema = new Schema({
   token: { type: String },
   resetToken: String, // password change
   phone: { type: Number },
+  birthDate: { type: String },
 });
 
 // SAVE
