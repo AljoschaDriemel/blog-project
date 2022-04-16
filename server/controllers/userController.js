@@ -9,7 +9,43 @@ console.log("uploadSimple is", uploadSimple);
 
 router.get("/", (req, res) => {
   res.send("HELLO FROM CONTROLLER");
+
+
 });
+
+
+//CLOUDINARY
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storageCloudinary = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "CMS",
+    format: async (req, file) => {
+      let extension = "";
+
+      if (file.mimetype.includes("image")) {
+        extension = file.mimetype.slice(6);
+
+        if (extension === "jpeg") extension = "jpg";
+      }
+
+      return extension;
+    },
+    public_id: (req, file) =>
+      `${req.body._id}-${Date.now()}-${file.originalname}`,
+  },
+});
+
+const uploadCloudinary = multer({ storage: storageCloudinary });
 
 //EMAIL
 const sendEmail = require("../utils/mail/mail");
@@ -87,7 +123,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-//Profile
+/* //Profile
 router.patch("/profile", uploadSimple.single("image"), async (req, res) => {
   try {
     console.log("req.body is", req.body);
@@ -116,7 +152,7 @@ router.patch("/profile", uploadSimple.single("image"), async (req, res) => {
     console.log("Register ERROR:", error.message);
     res.send(error.message);
   }
-});
+}); */
 
 // LOGOUT
 router.get("/logout", async (req, res) => {
@@ -207,5 +243,71 @@ router.post("/changepass", async (req, res) => {
     res.send(error.message);
   }
 });
+
+
+
+// PROFILE
+router.patch("/profile", uploadCloudinary.single("image"), async (req, res) => {
+  try {
+    console.log("req.body is", req.body);
+    console.log("req.file is", req.file);
+
+    const { email, username, _id } = req.body;
+
+    if (!(email || username)) return res.send({ success: false, errorId: 1 });
+
+    // req.body.image = req.file.filename
+    if (req.file) req.body.image = req.file.path;
+
+    const user = await User.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    }).select("-__v -pass");
+
+    console.log("Profile: user is", user);
+
+    if (!user) return res.send({ success: false, errorId: 2 });
+
+    res.send({ success: true, user });
+  } catch (error) {
+    console.log("Register ERROR:", error.message);
+    res.send(error.message);
+  }
+});
+
+router.patch(
+  "/profilecloudinary",
+  uploadCloudinary.single("image"),
+  async (req, res) => {
+    try {
+      console.log("req.body CLOUDINARY is", req.body);
+      console.log("req.file CLOUDINARY is", req.file);
+
+      const { email, username, _id } = req.body;
+
+      if (!(email || username)) return res.send({ success: false, errorId: 1 });
+
+      // const foundUser = await User.findById({_id})
+      //
+      // update users (field1, field2) set field1 = email and field2 = username
+
+      req.body.image = req.file.path;
+
+      const user = await User.findByIdAndUpdate(_id, req.body, {
+        new: true,
+      }).select("-__v -pass");
+
+      console.log("Profile: user CLOUDINARY is", user);
+
+      if (!user) return res.send({ success: false, errorId: 2 });
+
+      res.send({ success: true, user });
+    } catch (error) {
+      console.log("Register CLOUDINARY ERROR:", error.message);
+      res.send(error.message);
+    }
+  }
+);
+
+
 
 module.exports = router;
