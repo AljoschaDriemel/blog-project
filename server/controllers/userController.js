@@ -1,15 +1,80 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/UserModel");
-
 const multer = require("multer");
 const uploadSimple = multer({ dest: "./server/uploads" });
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/users/google/callback',
+  proxy: true
+}, async (accessToken, refreshToken, profile, done) => {
+
+  const email = profile._json.email
+
+  // check if there is such a user in db
+  const user = await User.findOne({email})
+
+  // if there is such user then return it
+  if (user) return done(null, user);
+
+  // create a new user to insert to the db
+  const newUser = new User({
+      username: profile.id,
+      email,
+      password: email
+  })
+
+  const savedUser = await newUser.save();
+
+  return done(null, savedUser)
+}))
+
 
 console.log("uploadSimple is", uploadSimple);
 
 router.get("/", (req, res) => {
   res.send("HELLO FROM CONTROLLER");
+
+
 });
+
+
+//CLOUDINARY
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storageCloudinary = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "CMS",
+    format: async (req, file) => {
+      let extension = "";
+
+      if (file.mimetype.includes("image")) {
+        extension = file.mimetype.slice(6);
+
+        if (extension === "jpeg") extension = "jpg";
+      }
+
+      return extension;
+    },
+    public_id: (req, file) =>
+      `${req.body._id}-${Date.now()}-${file.originalname}`,
+  },
+});
+
+const uploadCloudinary = multer({ storage: storageCloudinary });
 
 //EMAIL
 const sendEmail = require("../utils/mail/mail");
@@ -87,7 +152,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-//Profile
+/* //Profile
 router.patch("/profile", uploadSimple.single("image"), async (req, res) => {
   try {
     console.log("req.body is", req.body);
@@ -116,7 +181,7 @@ router.patch("/profile", uploadSimple.single("image"), async (req, res) => {
     console.log("Register ERROR:", error.message);
     res.send(error.message);
   }
-});
+}); */
 
 // LOGOUT
 router.get("/logout", async (req, res) => {
@@ -207,5 +272,106 @@ router.post("/changepass", async (req, res) => {
     res.send(error.message);
   }
 });
+
+
+
+// PROFILE
+router.patch("/profile", uploadCloudinary.single("image"), async (req, res) => {
+  try {
+    console.log("req.body is", req.body);
+    console.log("req.file is", req.file);
+
+    const { email, username, _id } = req.body;
+
+    if (!(email || username)) return res.send({ success: false, errorId: 1 });
+
+    // req.body.image = req.file.filename
+    if (req.file) req.body.image = req.file.path;
+
+    const user = await User.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    }).select("-__v -pass");
+
+    console.log("Profile: user is", user);
+
+    if (!user) return res.send({ success: false, errorId: 2 });
+
+    res.send({ success: true, user });
+  } catch (error) {
+    console.log("Register ERROR:", error.message);
+    res.send(error.message);
+  }
+});
+
+router.patch(
+  "/profilecloudinary",
+  uploadCloudinary.single("image"),
+  async (req, res) => {
+    try {
+      console.log("req.body CLOUDINARY is", req.body);
+      console.log("req.file CLOUDINARY is", req.file);
+
+      const { email, username, _id } = req.body;
+
+      if (!(email || username)) return res.send({ success: false, errorId: 1 });
+
+      // const foundUser = await User.findById({_id})
+      //
+      // update users (field1, field2) set field1 = email and field2 = username
+
+      req.body.image = req.file.path;
+
+      const user = await User.findByIdAndUpdate(_id, req.body, {
+        new: true,
+      }).select("-__v -pass");
+
+      console.log("Profile: user CLOUDINARY is", user);
+
+      if (!user) return res.send({ success: false, errorId: 2 });
+
+      res.send({ success: true, user });
+    } catch (error) {
+      console.log("Register CLOUDINARY ERROR:", error.message);
+      res.send(error.message);
+    }
+  }
+);
+
+
+// GOOGLE LOGIN PATHS
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/users/google/failure",
+    session: false,
+  }),
+  async (req, res) => {
+    console.log('from google callback: id is', req.user._id)
+
+    // User is the class. req.user is a new User
+    const token = await req.user.generateToken('1d')
+
+    res.cookie('cookieStore', token)
+
+    res.redirect('http://localhost:3000/glogin/' + req.user._id)
+  }
+);
+
+router.get('/glogin/:id', async (req, res) => {
+
+  console.log('from glogin: id is', req.params.id)
+
+  const user = await User.findById(req.params.id).select('-__v -pass')
+
+  res.send({success: true, user})
+})
+
+
 
 module.exports = router;

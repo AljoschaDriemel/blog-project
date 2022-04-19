@@ -2,6 +2,8 @@
 
 
 .login {
+  position: relative;
+  
   .bg-img {
     background: url("https://t3.ftcdn.net/jpg/01/22/71/96/360_F_122719641_V0yw2cAOrfxsON3HeWi2Sf4iVxhv27QO.jpg")
       no-repeat center fixed;
@@ -12,22 +14,29 @@
   }
 
   .login-main {
+    
     width: 750px;
     display: flex;
+    
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -55%);
     z-index: 2;
 
-    .form {
+    .login-left {
+      width: 375px;
+      height: 600px;
       position: relative;
       padding: 20px;
       text-align: center;
-      border-radius: 10px 0 0 10px;
-      width: 375px;
-      height: 600px;
+      border-radius: 10px 0 0 10px;     
       background: linear-gradient(to top, #b224ef, #7579ff);
+
+    }
+
+    .form {
+     
 
       .logo {
         margin: 1.5rem auto;
@@ -137,6 +146,15 @@
       height: 600px;
       background-color: black;
       border-radius: 0px 10px 10px 0;
+    }
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 992px) {
+  .login-main {
+    max-width: 375px;
+    .side {
+      display: none;
     }
   }
 }

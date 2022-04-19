@@ -5,26 +5,31 @@ import PrimarySearchAppBar from "./components/appbar/Appbar";
 import Navbar2 from "./components/navbar/Navbar2";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import Profile from './pages/profile/Profile'
-import EmailConfirm from './pages/email/EmailConfirm'
-import ForgotPass from './pages/forgotPass/ForgotPass'
-import ChangePass from './pages/changePass/ChangePass'
+import Profile from "./pages/profile/Profile";
+import EmailConfirm from "./pages/email/EmailConfirm";
+import ForgotPass from "./pages/forgotPass/ForgotPass";
+import ChangePass from "./pages/changePass/ChangePass";
 import NotFound from "./pages/notFound/NotFound";
-
+import Profile2 from "./components/profile2/Profile2";
+import GLogin from "./components/GLogin";
 
 function App() {
   return (
     <div className="App">
+
           <PrimarySearchAppBar />
           <Navbar2 />
       
+
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/glogin/:id' exact element={<GLogin />}/>
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile2" element={<Profile2 />} />
         <Route path="/emailconfirm/:token" element={<EmailConfirm />} />
         <Route path="/forgotpassword" element={<ForgotPass />} />
         <Route path="/changepassword/:token" element={<ChangePass />} />
