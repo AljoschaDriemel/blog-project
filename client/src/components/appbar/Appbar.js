@@ -1,4 +1,5 @@
 import * as React from "react";
+import './Appbar.scss'
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -188,7 +189,7 @@ export default function PrimarySearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className="toolbar">
           <IconButton
             size="large"
             edge="start"
@@ -206,7 +207,7 @@ export default function PrimarySearchAppBar() {
           >
             CMS
           </Typography>
-          <Search>
+          <Search >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -226,7 +227,7 @@ export default function PrimarySearchAppBar() {
               onClick={handleLogin}
             >
               {" "}
-              <IconButton  className="text-light"> LOGIN</IconButton>
+              {/* <IconButton  className="text-light"> LOGIN</IconButton> */}
               
             </Typography>
 
@@ -238,11 +239,11 @@ export default function PrimarySearchAppBar() {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
               onClick={handleProfile}
-            > <IconButton className="text-light"> Profile</IconButton>
+            > {/* <IconButton className="text-light"> Profile</IconButton> */}
              
             </Typography>
 
-            <IconButton onClick={handleLogout} className="text-light"> LOGOUT</IconButton>
+           {/*  <IconButton onClick={handleLogout} className="text-light"> LOGOUT</IconButton> */}
 
             <IconButton
               size="large"
