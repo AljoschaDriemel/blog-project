@@ -66,6 +66,12 @@ export default function Navbar2() {
             Profile
           </Button>
         </Link>
+        <Link to="/admin">
+          {" "}
+          <Button variant="contained" onClick={handleProfile} className="w-100">
+            Admin
+          </Button>
+        </Link>
       </Stack>
       <Divider />
       <Stack className="w-100" spacing={2} direction="row" style={{ padding: "20px 5px" }}>
