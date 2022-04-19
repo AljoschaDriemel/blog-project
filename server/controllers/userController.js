@@ -1,9 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/UserModel");
-
 const multer = require("multer");
 const uploadSimple = multer({ dest: "./server/uploads" });
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/users/google/callback',
+  proxy: true
+}, async (accessToken, refreshToken, profile, done) => {
+
+  const email = profile._json.email
+
+  // check if there is such a user in db
+  const user = await User.findOne({email})
+
+  // if there is such user then return it
+  if (user) return done(null, user);
+
+  // create a new user to insert to the db
+  const newUser = new User({
+      username: profile.id,
+      email,
+      password: email
+  })
+
+  const savedUser = await newUser.save();
+
+  return done(null, savedUser)
+}))
+
 
 console.log("uploadSimple is", uploadSimple);
 
@@ -307,6 +336,41 @@ router.patch(
     }
   }
 );
+
+
+// GOOGLE LOGIN PATHS
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/users/google/failure",
+    session: false,
+  }),
+  async (req, res) => {
+    console.log('from google callback: id is', req.user._id)
+
+    // User is the class. req.user is a new User
+    const token = await req.user.generateToken('1d')
+
+    res.cookie('cookieStore', token)
+
+    res.redirect('http://localhost:3000/glogin/' + req.user._id)
+  }
+);
+
+router.get('/glogin/:id', async (req, res) => {
+
+  console.log('from glogin: id is', req.params.id)
+
+  const user = await User.findById(req.params.id).select('-__v -pass')
+
+  res.send({success: true, user})
+})
 
 
 

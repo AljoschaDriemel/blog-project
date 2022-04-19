@@ -2,6 +2,7 @@
 
 
 .register {
+  position: relative;
   .bg-img {
     background: url("https://t3.ftcdn.net/jpg/01/22/71/96/360_F_122719641_V0yw2cAOrfxsON3HeWi2Sf4iVxhv27QO.jpg")
       no-repeat center fixed;
@@ -134,6 +135,15 @@
       height: 600px;
       background-color: black;
       border-radius: 0px 10px 10px 0px;
+    }
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 992px) {
+  .register-main {
+    max-width: 375px;
+    .side {
+      display: none;
     }
   }
 }
