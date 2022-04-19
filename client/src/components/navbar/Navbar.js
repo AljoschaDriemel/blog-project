@@ -17,24 +17,71 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+import { DataContext } from "../../pages/context/Context";
+
+
 const drawerWidth = 240;
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const handleLogin = () => {
-    navigate("/login");
+  const { userData, setUserData } = React.useContext(DataContext)
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
   };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+ 
+    //LOGIN
+
+    const navigate = useNavigate();
+    const handleLogin = () => {
+      navigate("/login");
+    };
+    const handleProfile = () => {
+      navigate("/profile")
+    }
+  
+    // LOGOUT
+    const handleLogout = async () => {
+  
+      const response = await axios.get('/users/logout')
+  
+      if (response.data.success) {
+         // clear the context
+      setUserData(null);
+      }
+     
+      // redirect user to home
+      navigate("/login");
+      console.log("after logout userDataContext is:", userData);
+    };
 
   return (
     <div>
       <Box sx={{ display: "flex" }}>
-      
         <CssBaseline />
-        
+       
         <Drawer
           component="nav"
           sx={{
-            zIndex: "-1",
+            /* zIndex: "1", */
             position: "static",
             width: drawerWidth,
             "& .MuiDrawer-paper": {
@@ -75,7 +122,7 @@ export default function Navbar() {
                 }}>
                 <ListItemIcon sx={{ color: "white", padding: "5px" }}>
                   <AccountBoxIcon />
-                  <ListItemText primary="Profile" />
+                  <ListItemText primary="Profile" onClick={handleProfile}/>
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
@@ -108,7 +155,7 @@ export default function Navbar() {
                 }}>
                 <ListItemIcon sx={{ color: "white" }}>
                   <LogoutIcon />
-                  <ListItemText primary="Logout" />
+                  <ListItemText primary="Logout" onClick={handleLogout} />
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
