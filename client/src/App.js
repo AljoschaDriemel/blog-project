@@ -2,7 +2,7 @@ import "./App.scss";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import PrimarySearchAppBar from "./components/appbar/Appbar";
-import Navbar from "./components/navbar/Navbar";
+import Navbar2 from "./components/navbar/Navbar2";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Profile from './pages/profile/Profile'
@@ -16,7 +16,8 @@ function App() {
   return (
     <div className="App">
           <PrimarySearchAppBar />
-          <Navbar />
+          <Navbar2 />
+      
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
