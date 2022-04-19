@@ -12,6 +12,8 @@ import ChangePass from "./pages/changePass/ChangePass";
 import NotFound from "./pages/notFound/NotFound";
 import Profile2 from "./components/profile2/Profile2";
 import GLogin from "./components/GLogin";
+import Admin from "./pages/admin/Admin";
+import Categories from './pages/admin/Categories'
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/:category" element={<Categories />} />
         <Route path="/login" element={<Login />} />
         <Route path='/glogin/:id' exact element={<GLogin />}/>
         <Route path="/register" element={<Register />} />

@@ -5,7 +5,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { styled } from "@mui/material/styles";
-import { Editor } from '@tinymce/tinymce-react';
+import { Editor } from "@tinymce/tinymce-react";
+import { useContext, useEffect } from "react";
+import { DataContext } from "../context/Context";
+import axios from "axios";
+import { Form } from "react-bootstrap";
 
 const Input = styled("input")({
   display: "none",
@@ -20,12 +24,23 @@ export default function Modal({
   valueImage,
   data,
   setData,
-  editorRef
+  editorRef,
 }) {
-  
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get("/admin/categories/list");
+      console.log("RESPONSE GET DATA : ", response);
+
+      setCategoryData(response.data);
+    };
+    getData();
+  }, []);
+
   const handleEditorChange = () => {
-    setData({...data, text:editorRef.current.getContent()})
-  }
+    setData({ ...data, text: editorRef.current.getContent() });
+  };
+  const { categoryData, setCategoryData } = useContext(DataContext);
+  console.log("cat data: ", categoryData);
   return (
     <Box
       style={{
@@ -63,11 +78,34 @@ export default function Modal({
             accept="image/*"
           />
           <label>Title: </label>
-          <input placeholder="Type the title" onChange={e=>setData({...data, title: e.target.value})} value={data.title}></input>
+          <input
+            placeholder="Type the title"
+            onChange={(e) => setData({ ...data, title: e.target.value })}
+            value={data.title}
+          ></input>
           <label>Subtitle: </label>
-          <input placeholder="Type the subtitle" onChange={e=>setData({...data, subtitle: e.target.value})} value={data.subtitle}></input>
-          <label>Category: </label>
+          <input
+            placeholder="Type the subtitle"
+            onChange={(e) => setData({ ...data, subtitle: e.target.value })}
+            value={data.subtitle}
+          ></input>
+          {/*  <label>Category: </label>
           <input placeholder="Type the category" onChange={e=>setData({...data, category: e.target.value})} value={data.category}></input>
+           */}
+
+          <Form.Group>
+            <Form.Select
+              onChange={e=>setData({...data, category: e.target.value})}
+              //name="department"
+              aria-label="Default select example"
+            >
+              {categoryData?.map((item) =>(
+                <option>{item.name}</option>
+              ))}
+              
+            </Form.Select>
+          </Form.Group>
+
           <Button
             variant="contained"
             component="span"
@@ -77,23 +115,25 @@ export default function Modal({
           </Button>
         </label>
         <Editor
-        onInit={(evt, editor) => editorRef.current = editor}
-        initialValue=""
-        init={{
-          height: 500,
-          menubar: true,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-          ],
-          toolbar: 'undo redo | formatselect | ' +
-          'bold italic backcolor | alignleft aligncenter ' +
-          'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
-        onEditorChange={handleEditorChange}
+          onInit={(evt, editor) => (editorRef.current = editor)}
+          initialValue=""
+          init={{
+            height: 500,
+            menubar: true,
+            plugins: [
+              "advlist autolink lists link image charmap print preview anchor",
+              "searchreplace visualblocks code fullscreen",
+              "insertdatetime media table paste code help wordcount",
+            ],
+            toolbar:
+              "undo redo | formatselect | " +
+              "bold italic backcolor | alignleft aligncenter " +
+              "alignright alignjustify | bullist numlist outdent indent | " +
+              "removeformat | help",
+            content_style:
+              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+          }}
+          onEditorChange={handleEditorChange}
           style={{ width: "95%" }}
           required
           id="outlined-required"

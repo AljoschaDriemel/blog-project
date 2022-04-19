@@ -10,6 +10,7 @@ app.use(express.json());
 app.use("/users", require("./controllers/userController"))
 app.use("/posts", require("./routes/postRoutes"));
 app.use("/posts/comments", require("./api/comments"))
+app.use("/admin", require("./controllers/adminController"));
 app.use(express.static("./server/uploads"))
 app.get('/', (req, res) => {
     res.send('HELLO FROM SERVER')
