@@ -73,7 +73,7 @@ export default function Login() {
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
               className="input input-email"
-              type="text"
+              type="password"
               placeholder={passwordPH}
               onFocus={() => setPaswordPH("")}
               onBlur={() => setPaswordPH("  Password")}

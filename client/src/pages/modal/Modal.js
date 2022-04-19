@@ -52,7 +52,7 @@ export default function Modal({
         width: "60%",
         height: "700px",
         top: "200px",
-        left: "350px",
+        left: "450px",
         display: "grid",
         placeContent: "center",
       }}
@@ -65,9 +65,6 @@ export default function Modal({
     >
       <Stack direction="column" alignItems="center" spacing={2}>
         {" "}
-        <h4 style={{ textAlign: "center" }}>
-          Please upload your image and add description*
-        </h4>
         <label htmlFor="file" style={{ cursor: "pointer" }}>
           <Input
             value={valueImage}
@@ -109,7 +106,7 @@ export default function Modal({
           <Button
             variant="contained"
             component="span"
-            style={{ margin: "10px" }}
+            style={{ margin: "5px", marginLeft:"440px"  }}
           >
             Upload <PhotoCameraIcon />
           </Button>
@@ -158,7 +155,6 @@ export default function Modal({
           onClick={save}
           endIcon={<SendIcon />}
           style={{ width: "50%" }}
-          onClick={save}
         >
           Save
         </Button>

@@ -10,6 +10,8 @@ import { purple } from "@mui/material/colors";
 import "./Profile.scss";
 import { useRef } from 'react';
 import parse from "html-react-parser"
+import { textAlign } from "@mui/system";
+import moment from "moment";
 
 
 export default function Profile() {
@@ -102,17 +104,18 @@ export default function Profile() {
   return (
     <div className="profileContainer">
       <div className="profileInfo">
-        <h1 style={{fontWeight:"bold"}}>
+        <h1 style={{fontWeight:"bold", textAlign:"center"}}>
           {" "}
           Welcome admin: @{userData ? userData.username : "Stranger"}{" "}
           <div>
-            <h5>{posts.length} posts</h5>{" "}
+            <h5>{posts?.filter((item) => item?.owner._id === userData?._id).length} posts</h5>{" "}
           </div>
         </h1>
-
-        <ColorButton variant="contained" onClick={() => setShowModal(true)}>
+        <div className="addPost"><ColorButton variant="contained" onClick={() => setShowModal(true)}>
           Add Post
         </ColorButton>
+        </div>
+        
       </div>
       <div className="userPostContainer">
         {posts?.map((item) =>
@@ -128,8 +131,10 @@ export default function Profile() {
               <h2>{item.title}</h2>
               <h4>{item.subtitle}</h4>
               <p>{parse(item.text)}</p>
-              <p>Text created by {item.owner.username} on {item.date}</p>
+              <div className="info"><p>Text created by {item.owner.username} on {moment(item.date).format("MMM DD YYYY hh:mm")}</p>
               <p>Category: {item.category}</p>
+              </div>
+              
               
             </div>
           ) : null
