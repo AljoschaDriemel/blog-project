@@ -23,6 +23,7 @@ import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CommentIcon from "@mui/icons-material/Comment";
+import moment from "moment"
 
 
 export default function Home() {
@@ -201,7 +202,7 @@ export default function Home() {
               </Typography>
             </CardContent>
              <Typography variant="body2" color="text.secondary">
-                <div style={{textAlign:"left", marginLeft:"10px"}}>Text added by <span style={{fontWeight:"bold"}}>{item.owner.username} on {item.date}</span></div>
+                <div style={{textAlign:"left", marginLeft:"10px"}}>Text added by <span style={{fontWeight:"bold"}}>{item.owner.username} on {moment(item.date).format("MMM DD YYYY")}</span></div>
               </Typography> 
             <CardActions
               disableSpacing
