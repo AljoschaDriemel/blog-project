@@ -1,19 +1,19 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { Link } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import { flexbox } from '@mui/system';
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import { flexbox } from "@mui/system";
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -24,7 +24,6 @@ export default function BasicModal() {
 
   return (
     <div>
-      
       <Modal
         open={open}
         onClose={handleClose}
@@ -33,18 +32,14 @@ export default function BasicModal() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h2" component="h1">
-          404 - Not Found!
+            404 - Not Found!
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <DoubleArrowIcon />
-          <Link to="/">BACK TO DASHBOARD</Link> 
-    </Typography>
-          
+            <DoubleArrowIcon />
+            <Link to="/">BACK TO DASHBOARD</Link>
+          </Typography>
         </Box>
       </Modal>
     </div>
   );
 }
-
-
-
