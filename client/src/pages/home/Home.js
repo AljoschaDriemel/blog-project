@@ -202,7 +202,8 @@ export default function Home() {
               </Typography>
             </CardContent>
              <Typography variant="body2" color="text.secondary">
-                <div style={{textAlign:"left", marginLeft:"10px"}}>Text added by <span style={{fontWeight:"bold"}}>{item.owner.username} on {moment(item.date).format("MMM DD YYYY")}</span></div>
+                <div style={{textAlign:"left", marginLeft:"10px"}}>Text added by <span style={{fontWeight:"bold"}}>{item.owner.username} at {moment(item.date).format("MMM DD YYYY hh:mm")}</span></div>
+                <p style={{marginLeft:"10px"}}>Category: {item.category}</p>
               </Typography> 
             <CardActions
               disableSpacing
